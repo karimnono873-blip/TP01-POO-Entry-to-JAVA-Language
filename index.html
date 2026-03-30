@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP N°01 POO - Programmation Java</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+        :root {
+            --pixel-blue: #1a73e8;
+            --pixel-cyan: #00bcd4;
+            --pixel-blue-light: #e8f0fe;
+            --pixel-cyan-light: #e0f7fa;
+            --bg-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --sidebar-width: 280px;
+            --terminal-bg: #202124;
+            --terminal-text: #00e676;
+            --terminal-cyan: #26c6da;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-color);
+            display: flex;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        /* Sidebar Navigation */
+        nav.sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--surface-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 30px 20px;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.05);
+            border-right: 1px solid #dadce0;
+        }
+
+        nav.sidebar h2 {
+            font-size: 1.5rem;
+            color: var(--pixel-blue);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        nav.sidebar ul {
+            list-style-type: none;
+        }
+
+        nav.sidebar ul li {
+            margin-bottom: 8px;
+        }
+
+        nav.sidebar ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: block;
+            padding: 12px 16px;
+            border-radius: 24px;
+            transition: all 0.2s ease;
+        }
+
+        nav.sidebar ul li a:hover {
+            background-color: var(--pixel-blue-light);
+            color: var(--pixel-blue);
+        }
+
+        nav.sidebar ul li ul {
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+
+        nav.sidebar ul li ul li a {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        main.content {
+            margin-left: var(--sidebar-width);
+            padding: 40px 60px;
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+        }
+
+        /* Cards and Sections */
+        section {
+            background: var(--surface-color);
+            border-radius: 28px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+            border: 1px solid #eaebed;
+        }
+
+        .cover-page {
+            text-align: center;
+            background: linear-gradient(135deg, var(--pixel-blue-light) 0%, var(--surface-color) 100%);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: var(--pixel-cyan);
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .cover-page h3.university {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .cover-page h3.faculty {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .cover-page h1.tp-title {
+            font-size: 2.8rem;
+            background: -webkit-linear-gradient(45deg, var(--pixel-blue), var(--pixel-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+            line-height: 1.3;
+        }
+
+        .cover-page h2.module-name {
+            font-size: 1.8rem;
+            color: var(--pixel-cyan);
+            margin-bottom: 50px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .details-grid p {
+            font-size: 1.1rem;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .details-grid strong {
+            color: var(--pixel-blue);
+        }
+
+        h2.section-title {
+            color: var(--pixel-blue);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        h2.section-title::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 32px;
+            background: var(--pixel-cyan);
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        h3.subsection-title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin: 30px 0 15px 0;
+            font-weight: 500;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #dadce0;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dadce0;
+        }
+
+        th {
+            background-color: var(--pixel-blue-light);
+            color: var(--pixel-blue);
+            font-weight: 500;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Code Source Styling */
+        .code-container {
+            background: #f1f3f4;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 25px 0;
+            border: 1px solid #e8eaed;
+        }
+
+        .code-header {
+            background: #e8eaed;
+            padding: 12px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #3c4043;
+            margin: 0;
+        }
+
+        .keyword { color: #1a73e8; font-weight: bold; }
+        .type { color: #00838f; }
+        .string { color: #1e8e3e; }
+        .comment { color: #70757a; font-style: italic; }
+
+        /* Real-Time Terminal Styling */
+        .terminal-container {
+            background: var(--terminal-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .terminal-header {
+            background: #303134;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .terminal-title {
+            color: #9aa0a6;
+            font-size: 0.85rem;
+            font-family: 'Consolas', monospace;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: var(--terminal-text);
+            min-height: 150px;
+            max-height: 300px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .terminal-line { margin-bottom: 8px; }
+        .terminal-prompt { color: var(--terminal-cyan); }
+        
+        .terminal-input-wrapper {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95rem;
+            flex-grow: 1;
+            outline: none;
+            margin-left: 10px;
+            border-bottom: 1px dashed var(--terminal-cyan);
+        }
+
+        .btn-run {
+            background: var(--pixel-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .btn-run:hover {
+            background: #1557b0;
+        }
+
+        .btn-clear {
+            background: transparent;
+            border: 1px solid #5f6368;
+            color: #9aa0a6;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .btn-clear:hover { background: #303134; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>TP N°01 POO</h2>
+        <ul>
+            <li><a href="#cover">Page de Garde</a></li>
+            <li><a href="#objectifs">1. Objectifs & Outils</a></li>
+            <li><a href="#rappels">2. Rappels Théoriques</a>
+                <ul>
+                    <li><a href="#types-entiers">Types Entiers</a></li>
+                    <li><a href="#types-reels">Types Réels</a></li>
+                    <li><a href="#operateurs">Opérateurs</a></li>
+                </ul>
+            </li>
+            <li><a href="#ex1">3. Exercice 1 : Âge</a></li>
+            <li><a href="#ex2">4. Exercice 2 : Bienvenue</a></li>
+            <li><a href="#ex3">5. Exercice 3 : Parité</a></li>
+            <li><a href="#ex4">6. Exercice 4 : Nbr Premier</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+
+        <section id="cover" class="cover-page">
+            <h3 class="university">Université des Sciences et de la Technologie HOUARI BOUMEDIENE</h3>
+            <h3 class="faculty">Faculté de Génie Electrique FGE — Département d'Automatique</h3>
+            
+            <h1 class="tp-title">Programmation des structures algorithmiques par Langage Java (POO)</h1>
+            <h2 class="module-name">Module: TP POO — TP N° 1</h2>
+            
+            <div class="details-grid">
+                <p><strong>Spécialité :</strong> Automatique</p>
+                <p><strong>Niveau :</strong> M1 AII</p>
+                <p><strong>Enseignant :</strong> MENANI</p>
+                <p><strong>Réalisé par :</strong> [Nom et Prénom]</p>
+            </div>
+        </section>
+
+        <section id="objectifs">
+            <h2 class="section-title">1. Objectifs et Outils du TP</h2>
+            <p>Le but de ce TP est de faire la programmation des algorithmes et des structures algorithmiques de contrôle par l'utilisation du langage Java (POO).</p>
+            <p>L'énoncé composé groupe des actions qui sont ensuite considérées comme une seule action. Dans notre notation algorithmique, les énoncés à composer seront placés entre les deux parenthéseurs début et fin. Les parenthéseurs sont représentés par les accolades ouvrantes et fermantes en Java.</p>
+            <p>En JAVA, il n'y a pas à proprement parler de séparateur d'énoncé. Toutefois, un point-virgule est nécessaire pour terminer un énoncé simple.</p>
+        </section>
+
+        <section id="rappels">
+            <h2 class="section-title">2. Rappels Théoriques</h2>
+            
+            <h3 id="types-entiers" class="subsection-title">2.1 Déclaration des variables en JAVA</h3>
+            <p>Les types entiers byte, short, int, long sont signés et représentés en complément à 2. Ils se distinguent par leur cardinal. Les entiers du type byte sont représentés sur 8 bits, ceux du type short sur 16 bits, ceux du type int sur 32 bits et ceux du type long sur 64 bits.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Minimum</th>
+                        <th>Maximum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>byte</strong></td><td>Byte.MIN_VALUE</td><td>Byte.MAX_VALUE</td></tr>
+                    <tr><td><strong>short</strong></td><td>Short.MIN_VALUE</td><td>Short.MAX_VALUE</td></tr>
+                    <tr><td><strong>int</strong></td><td>Integer.MIN_VALUE</td><td>Integer.MAX_VALUE</td></tr>
+                    <tr><td><strong>long</strong></td><td>Long.MIN_VALUE</td><td>Long.MAX_VALUE</td></tr>
+                </tbody>
+            </table>
+
+            <h3 id="types-reels" class="subsection-title">2.2 Autres Types</h3>
+            <p><strong>Les types réels :</strong> Java définit plusieurs types réels: float et double. Les réels du type float sont en simple précision codés sur 32 bits, ceux du type double sont en double précision codés sur 64 bits. Exemple : <code>float distance, rayon;</code></p>
+            <p><strong>Le type booléen :</strong> Le type boolean définit les deux valeurs true et false. Exemple : <code>boolean present, onContinue;</code></p>
+
+            <h3 id="operateurs" class="subsection-title">2.3 Opérations sur les variables en Java</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Opérateur</th>
+                        <th>Fonction</th>
+                        <th>Exemple</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="5"><strong>Opérateurs arithmétiques</strong></td>
+                        <td><code>-</code></td><td>Soustraction / Opposé</td><td><code>a - 4</code></td>
+                    </tr>
+                    <tr><td><code>+</code></td><td>Addition</td><td><code>45 + 5</code></td></tr>
+                    <tr><td><code>*</code></td><td>Multiplication</td><td><code>a * b</code></td></tr>
+                    <tr><td><code>/</code></td><td>Division</td><td><code>5 / 45</code></td></tr>
+                    <tr><td><code>%</code></td><td>Modulo</td><td><code>a % 4</code></td></tr>
+                    <tr>
+                        <td rowspan="4"><strong>Opérateurs relationnels</strong></td>
+                        <td><code>&lt;</code> / <code>&lt;=</code></td><td>Inférieur / Inférieur ou égal</td><td><code>a &lt; b</code></td>
+                    </tr>
+                    <tr><td><code>==</code></td><td>Égal</td><td><code>a == b</code></td></tr>
+                    <tr><td><code>!=</code></td><td>Différent</td><td><code>a != b</code></td></tr>
+                    <tr><td><code>&gt;</code> / <code>&gt;=</code></td><td>Supérieur / Supérieur ou égal</td><td><code>a &gt; b</code></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="ex1">
+            <h2 class="section-title">3. Exercice 1</h2>
+            <p>Ecrire un programme en java qui permet de tester l'âge d'une personne saisi à l'écran, il lui affiche mineur si l'âge est inférieur à 18 ans et majeur sinon.</p>
+
+            <div class="code-container">
+                <div class="code-header">Exercice1.java</div>
+<pre>
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> <span class="type">Exercice1</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+        System.out.print(<span class="string">"Veuillez saisir votre age : "</span>);
+        <span class="type">int</span> age = sc.nextInt();
+        
+        <span class="keyword">if</span> (age &lt; <span class="number">18</span>) {
+            System.out.println(<span class="string">"mineur"</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(<span class="string">"majeur"</span>);
+        }
+        sc.close();
+    }
+}
+</pre>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div class="terminal-title">java Exercice1 — Exécution en Temps Réel</div>
+                    <button class="btn-clear" onclick="clearTerm('out1')">Clear</button>
+                </div>
+                <div class="terminal-body" id="out1">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> Compilation réussie. Programme prêt.</div>
+                    <div class="terminal-input-wrapper">
+                        Veuillez saisir votre age : 
+                        <input type="number" id="in1" class="terminal-input" placeholder="ex: 17">
+                        <button class="btn-run" onclick="runEx1()">Exécuter</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ex2">
+            <h2 class="section-title">4. Exercice 2</h2>
+            <p>Ecrire un programme java qui demande à l'utilisateur de saisir son nom et de lui afficher son nom avec le message de bienvenue.</p>
+
+            <div class="code-container">
+                <div class="code-header">Exercice2.java</div>
+<pre>
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> <span class="type">Exercice2</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+        System.out.print(<span class="string">"Veuillez saisir votre nom : "</span>);
+        <span class="type">String</span> nom = sc.nextLine();
+        
+        System.out.println(<span class="string">"Bienvenue, "</span> + nom + <span class="string">" !"</span>);
+        sc.close();
+    }
+}
+</pre>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div class="terminal-title">java Exercice2 — Exécution en Temps Réel</div>
+                    <button class="btn-clear" onclick="clearTerm('out2')">Clear</button>
+                </div>
+                <div class="terminal-body" id="out2">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> Compilation réussie. Programme prêt.</div>
+                    <div class="terminal-input-wrapper">
+                        Veuillez saisir votre nom : 
+                        <input type="text" id="in2" class="terminal-input" placeholder="ex: Karim" autocomplete="off">
+                        <button class="btn-run" onclick="runEx2()">Exécuter</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ex3">
+            <h2 class="section-title">5. Exercice 3</h2>
+            <p>Écrire un programme Java qui lit sur l'entrée un entier N, et qu'il affiche un message à la fin du programme, que ce nombre N est pair ou impair.</p>
+
+            <div class="code-container">
+                <div class="code-header">Exercice3.java</div>
+<pre>
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> <span class="type">Exercice3</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+        System.out.print(<span class="string">"Saisissez un nombre entier N : "</span>);
+        <span class="type">int</span> n = sc.nextInt();
+        
+        <span class="keyword">if</span> (n % <span class="number">2</span> == <span class="number">0</span>) {
+            System.out.println(<span class="string">"Le nombre "</span> + n + <span class="string">" est pair."</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(<span class="string">"Le nombre "</span> + n + <span class="string">" est impair."</span>);
+        }
+        sc.close();
+    }
+}
+</pre>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div class="terminal-title">java Exercice3 — Exécution en Temps Réel</div>
+                    <button class="btn-clear" onclick="clearTerm('out3')">Clear</button>
+                </div>
+                <div class="terminal-body" id="out3">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> Compilation réussie. Programme prêt.</div>
+                    <div class="terminal-input-wrapper">
+                        Saisissez un nombre entier N : 
+                        <input type="number" id="in3" class="terminal-input" placeholder="ex: 14">
+                        <button class="btn-run" onclick="runEx3()">Exécuter</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ex4">
+            <h2 class="section-title">6. Exercice 4</h2>
+            <p>Ecrire un programme Java qui demande à l'utilisateur de saisir un nombre entier n et de lui afficher si le nombre tapé est premier ou non ?</p>
+
+            <div class="code-container">
+                <div class="code-header">Exercice4.java</div>
+<pre>
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> <span class="type">Exercice4</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">Scanner</span> sc = <span class="keyword">new</span> <span class="type">Scanner</span>(System.in);
+        System.out.print(<span class="string">"Veuillez saisir un nombre n : "</span>);
+        <span class="type">int</span> n = sc.nextInt();
+        <span class="type">boolean</span> estPremier = <span class="keyword">true</span>;
+        
+        <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) {
+            estPremier = <span class="keyword">false</span>;
+        } <span class="keyword">else</span> {
+            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= Math.sqrt(n); i++) {
+                <span class="keyword">if</span> (n % i == <span class="number">0</span>) {
+                    estPremier = <span class="keyword">false</span>;
+                    <span class="keyword">break</span>;
+                }
+            }
+        }
+        
+        <span class="keyword">if</span> (estPremier) {
+            System.out.println(n + <span class="string">" est premier."</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(n + <span class="string">" n'est pas premier."</span>);
+        }
+        sc.close();
+    }
+}
+</pre>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    </div>
+                    <div class="terminal-title">java Exercice4 — Exécution en Temps Réel</div>
+                    <button class="btn-clear" onclick="clearTerm('out4')">Clear</button>
+                </div>
+                <div class="terminal-body" id="out4">
+                    <div class="terminal-line"><span class="terminal-prompt">$</span> Compilation réussie. Programme prêt.</div>
+                    <div class="terminal-input-wrapper">
+                        Veuillez saisir un nombre n : 
+                        <input type="number" id="in4" class="terminal-input" placeholder="ex: 17">
+                        <button class="btn-run" onclick="runEx4()">Exécuter</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function appendResult(terminalId, inputVal, resultText) {
+            const termBody = document.getElementById(terminalId);
+            const wrapper = termBody.querySelector('.terminal-input-wrapper');
+            
+            const newOutput = document.createElement('div');
+            newOutput.className = 'terminal-line';
+            newOutput.innerHTML = `<span style="color: #fff;">> ${inputVal}</span><br>${resultText}`;
+            
+            termBody.insertBefore(newOutput, wrapper);
+            termBody.scrollTop = termBody.scrollHeight;
+        }
+
+        function clearTerm(terminalId) {
+            const termBody = document.getElementById(terminalId);
+            const wrapper = termBody.querySelector('.terminal-input-wrapper');
+            termBody.innerHTML = `<div class="terminal-line"><span class="terminal-prompt">$</span> Console effacée.</div>`;
+            termBody.appendChild(wrapper);
+        }
+
+        function runEx1() {
+            const inputEl = document.getElementById('in1');
+            const val = inputEl.value;
+            if(val === '') return;
+            const age = parseInt(val);
+            const res = age < 18 ? "mineur" : "majeur";
+            appendResult('out1', val, res);
+            inputEl.value = '';
+        }
+
+        function runEx2() {
+            const inputEl = document.getElementById('in2');
+            const val = inputEl.value;
+            if(val.trim() === '') return;
+            const res = `Bienvenue, ${val} !`;
+            appendResult('out2', val, res);
+            inputEl.value = '';
+        }
+
+        function runEx3() {
+            const inputEl = document.getElementById('in3');
+            const val = inputEl.value;
+            if(val === '') return;
+            const n = parseInt(val);
+            const res = n % 2 === 0 ? `Le nombre ${n} est pair.` : `Le nombre ${n} est impair.`;
+            appendResult('out3', val, res);
+            inputEl.value = '';
+        }
+
+        function runEx4() {
+            const inputEl = document.getElementById('in4');
+            const val = inputEl.value;
+            if(val === '') return;
+            const n = parseInt(val);
+            let isPrime = true;
+            
+            if (n <= 1) {
+                isPrime = false;
+            } else {
+                for (let i = 2; i <= Math.sqrt(n); i++) {
+                    if (n % i === 0) {
+                        isPrime = false;
+                        break;
+                    }
+                }
+            }
+            const res = isPrime ? `${n} est premier.` : `${n} n'est pas premier.`;
+            appendResult('out4', val, res);
+            inputEl.value = '';
+        }
+
+        // Allow pressing Enter to run
+        document.getElementById('in1').addEventListener('keypress', function(e) { if(e.key === 'Enter') runEx1(); });
+        document.getElementById('in2').addEventListener('keypress', function(e) { if(e.key === 'Enter') runEx2(); });
+        document.getElementById('in3').addEventListener('keypress', function(e) { if(e.key === 'Enter') runEx3(); });
+        document.getElementById('in4').addEventListener('keypress', function(e) { if(e.key === 'Enter') runEx4(); });
+    </script>
+</body>
+</html>
